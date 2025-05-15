@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../src/index.ts"],
-  "sourcesContent": ["console.log('reactivity');\r\nconsole.log('reactivity1');\r\n"],
-  "mappings": ";;;AAAA,UAAQ,IAAI,YAAY;AACxB,UAAQ,IAAI,aAAa;",
-  "names": []
-}
