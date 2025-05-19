@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>effect重复收集的问题</title>
+</head>
+
+<body>
+
+    <button id="btn">change flag</button>
+    <script type="module">
+        // import  {ref,effect} from '../../../node_modules/vue/dist/vue.esm-browser.js'
+        import { ref, effect } from '../dist/reactivity.esm.js'
+        const flag = ref(false)
+
+        effect(() => {
+            console.log('effect', flag.value);
+        })
+
+        // console.log(`output->btn`, btn)
+        btn.onclick = () => {
+            //会重复将同一个effect收集到ref类中  即 ref 发生改变后执行的effect 队列中有重复的effect执行
+            flag.value = !flag.value
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>

@@ -3,5 +3,33 @@
     "singleQuote": true,
     "htmlWhitespaceSensitivity": "ignore",
     "trailingComma": "all",
-    "arrowParens": "avoid"
+    "arrowParens": "avoid",
+    "overrides": [
+        {
+            "files": "*.ts",
+            "options": {
+                "semi": true,
+                "singleQuote": true,
+                "htmlWhitespaceSensitivity": "ignore",
+                "trailingComma": "all",
+                "arrowParens": "avoid"
+            }
+          },
+        {
+          "files": "*.test.js",
+          "options": {
+            "semi": true
+          }
+        },
+        {
+          "files": ["*.html", "legacy/**/*.js"],
+          "options": {
+            "tabWidth": 4
+          }
+        },
+        {
+            "files": ".prettierrc",
+            "options": { "parser": "json" }
+        } 
+      ]
 }

@@ -16,25 +16,7 @@ var ReactivityEffect = class {
   }
 };
 
-// packages/reactivity/src/ref.ts
-var ref = (value) => {
-  return new RefImpl(value);
-};
-var RefImpl = class {
-  constructor(_value) {
-    this._value = _value;
-  }
-  get value() {
-    if (activeSub) {
-      collect(this);
-    }
-    return this._value;
-  }
-  set value(newValue) {
-    this._value = newValue;
-    trigger(this);
-  }
-};
+// packages/reactivity/src/system.ts
 var collect = (refObj) => {
   const newSub = {
     prevSub: void 0,
@@ -64,11 +46,31 @@ var trigger = (refObj) => {
     }
   }
 };
+
+// packages/reactivity/src/ref.ts
+var ref = (value) => {
+  return new RefImpl(value);
+};
+var RefImpl = class {
+  constructor(_value) {
+    this._value = _value;
+  }
+  get value() {
+    if (activeSub) {
+      collect(this);
+    }
+    return this._value;
+  }
+  set value(newValue) {
+    this._value = newValue;
+    trigger(this);
+  }
+};
 export {
+  ReactivityEffect,
+  RefImpl,
   activeSub,
-  collect,
   effect,
-  ref,
-  trigger
+  ref
 };
 //# sourceMappingURL=reactivity.esm.js.map
