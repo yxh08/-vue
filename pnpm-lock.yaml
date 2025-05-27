@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      prettier:
+        specifier: ^3.5.3
+        version: 3.5.3
     devDependencies:
       '@types/node':
         specifier: ^22.15.3
@@ -21,7 +25,7 @@ importers:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.8.3)
 
-  packages/reactivity: {}
+  packages/Reactivity: {}
 
 packages:
 
@@ -257,6 +261,11 @@ packages:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
 
+  prettier@3.5.3:
+    resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
+    engines: {node: '>=14'}
+    hasBin: true
+
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
@@ -474,6 +483,8 @@ snapshots:
       nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
+
+  prettier@3.5.3: {}
 
   source-map-js@1.2.1: {}
 

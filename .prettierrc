@@ -16,20 +16,20 @@
             }
           },
         {
-          "files": "*.test.js",
+          "files": "*.js",
           "options": {
             "semi": true
           }
         },
         {
-          "files": ["*.html", "legacy/**/*.js"],
+          "files": "*.html",
           "options": {
-            "tabWidth": 4
+            "semi": true,
+            "singleQuote": true,
+            "htmlWhitespaceSensitivity": "ignore",
+            "trailingComma": "all",
+            "arrowParens": "avoid"
           }
-        },
-        {
-            "files": ".prettierrc",
-            "options": { "parser": "json" }
-        } 
+        }
       ]
 }

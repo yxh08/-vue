@@ -1,48 +1,77 @@
 // packages/reactivity/src/effect.ts
 var activeSub;
-var effect = (fn) => {
+function effect(fn, effectOptions) {
   const e = new ReactivityEffect(fn);
+  Object.assign(e, effectOptions);
   e.run();
-};
+  const runner = () => e.run();
+  runner.effect = e;
+  return runner;
+}
 var ReactivityEffect = class {
   constructor(fn) {
     this.fn = fn;
   }
   run() {
     const prevActiveSub = activeSub;
-    activeSub = this;
-    this.fn();
-    activeSub = prevActiveSub;
+    try {
+      this.depsTail = void 0;
+      activeSub = this;
+      this.fn();
+    } finally {
+      activeSub = prevActiveSub;
+    }
+  }
+  scheduler() {
+    this.run();
+  }
+  notify() {
+    this.scheduler();
   }
 };
 
 // packages/reactivity/src/system.ts
-var collect = (refObj) => {
-  const newSub = {
-    prevSub: void 0,
-    sub: activeSub,
-    nextSub: void 0
-  };
-  if (!refObj.headSub) {
-    refObj.headSub = newSub;
-    refObj.tailSub = newSub;
+var collect = (dep, sub) => {
+  const currentDep = sub.deps && sub.depsTail == void 0 ? sub.deps : sub.depsTail?.nextDep;
+  if (sub.deps && currentDep?.dep == dep) {
+    sub.depsTail = currentDep;
+    return;
   } else {
-    refObj.tailSub.nextSub = newSub;
-    newSub.prevSub = refObj.tailSub;
-    refObj.tailSub = newSub;
+    console.log("\u672A\u88AB\u590D\u7528\u7684dep", currentDep);
+  }
+  const newLink = {
+    sub,
+    prevSub: void 0,
+    nextSub: void 0,
+    dep,
+    nextDep: void 0
+  };
+  if (!sub.deps) {
+    sub.deps = newLink;
+    sub.depsTail = newLink;
+  } else {
+    sub.depsTail.nextDep = newLink;
+    sub.depsTail = newLink;
+  }
+  if (!dep.subs) {
+    dep.subs = newLink;
+    dep.subsTail = newLink;
+  } else {
+    dep.subsTail.nextSub = newLink;
+    newLink.prevSub = dep.subsTail;
+    dep.subsTail = newLink;
   }
 };
-var trigger = (refObj) => {
-  if (refObj.headSub) {
-    let curSub = refObj.headSub;
+var trigger = (dep) => {
+  if (dep.subs) {
+    let curSub = dep.subs;
     let queue = [];
     while (curSub?.sub) {
       queue.push(curSub.sub);
       curSub = curSub.nextSub;
     }
-    console.log("\u5F85\u6267\u884C\u961F\u5217", queue);
     for (let i = 0; i <= queue.length - 1; i++) {
-      queue[i].run();
+      queue[i].notify();
     }
   }
 };
@@ -57,7 +86,7 @@ var RefImpl = class {
   }
   get value() {
     if (activeSub) {
-      collect(this);
+      collect(this, activeSub);
     }
     return this._value;
   }

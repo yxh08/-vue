@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>effect重复收集的问题</title>
+</head>
+<body>
+<button id="btn">showName</button>
+<button id="ageBtn">age++</button>
+<div id="board"></div>
+    <script type="module">
+        import  {ref,effect} from '../../../node_modules/vue/dist/vue.esm-browser.prod.js'
+        // import { ref, effect } from '../dist/reactivity.esm.js'
+        const showName = ref(false)
+        const age = ref(18)
+        const name = ref('jack')
+
+        const e = effect(()=>{
+          console.count('effect')
+          if(showName.value){
+            board.innerHTML = `${name.value}`
+            btn.innerHTML = `展示名字`
+          }else{
+            board.innerHTML = `${age.value}`
+            btn.innerHTML = `展示年龄`
+          }
+        })
+
+        btn.onclick = () => {
+          showName.value = !showName.value
+          console.dir(age)
+        }
+        ageBtn.onclick = ()=> {
+          age.value ++
+          console.dir(age)
+
+        }
+    </script>
+
+</body>
+
+</html>
