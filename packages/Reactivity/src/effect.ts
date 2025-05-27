@@ -1,17 +1,35 @@
-export let activeSub
+export let activeSub: ReactivityEffect;
 
-export const effect = fn => {
-  const e = new ReactivityEffect(fn)
-  e.run()
-}
+export  function effect (fn: Function, effectOptions: {}) {
+  const e = new ReactivityEffect(fn);
+  Object.assign(e, effectOptions);
+  e.run();
+  const runner = () => e.run()
+  runner.effect = e;
+  return runner;
+};
 
-class ReactivityEffect {
-  constructor(public fn) {}
+import type { Link } from './system';
+
+export class ReactivityEffect {
+  deps: Link | undefined;
+  depsTail: Link | undefined;
+  constructor(public fn: Function) {}
 
   run() {
-    const prevActiveSub = activeSub
-    activeSub = this
-    this.fn()
-    activeSub = prevActiveSub
+    const prevActiveSub = activeSub;
+    try {
+      this.depsTail = undefined
+      activeSub = this;
+      this.fn();
+    } finally {
+      activeSub = prevActiveSub;
+    }
+  }
+  scheduler() {
+    this.run();
+  }
+  notify() {
+    this.scheduler();
   }
 }
