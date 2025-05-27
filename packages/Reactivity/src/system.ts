@@ -1,22 +1,22 @@
 //依赖项
-import { ReactivityEffect } from './effect';
+import { ReactivityEffect } from './effect'
 
 export interface Dep {
-  subs: Link;
-  subsTail: Link | undefined;
+  subs: Link
+  subsTail: Link | undefined
 }
 //依赖项
 export interface Sub extends ReactivityEffect {
-  deps: Link;
-  depsTail: Link | undefined;
+  deps: Link
+  depsTail: Link | undefined
 }
 
 export interface Link {
-  sub: Sub;
-  nextSub: Link | undefined;
-  prevSub: Link | undefined;
-  dep: Dep;
-  nextDep: Link | undefined;
+  sub: Sub
+  nextSub: Link | undefined
+  prevSub: Link | undefined
+  dep: Dep
+  nextDep: Link | undefined
 }
 
 //依赖收集 与 分支切换
@@ -34,15 +34,15 @@ export const collect = (dep, sub) => {
    */
 
   const currentDep =
-    sub.deps && sub.depsTail == undefined ? sub.deps : sub.depsTail?.nextDep;
+    sub.deps && sub.depsTail == undefined ? sub.deps : sub.depsTail?.nextDep
   // console.log('currentDep',currentDep)
   if (sub.deps && currentDep?.dep == dep) {
     //节点对比复用
     // console.log('复用节点', currentDep);
-    sub.depsTail = currentDep;
-    return;
+    sub.depsTail = currentDep
+    return
   } else {
-    console.log('未被复用的dep', currentDep);
+    console.log('未被复用的dep', currentDep)
   }
   // 依赖收集
   const newLink: Link = {
@@ -51,38 +51,38 @@ export const collect = (dep, sub) => {
     nextSub: undefined,
     dep,
     nextDep: undefined,
-  };
+  }
 
   if (!sub.deps) {
-    sub.deps = newLink;
-    sub.depsTail = newLink;
+    sub.deps = newLink
+    sub.depsTail = newLink
   } else {
-    sub.depsTail!.nextDep = newLink;
-    sub.depsTail = newLink;
+    sub.deps.nextDep = newLink
+    sub.depsTail = newLink
   }
 
   if (!dep.subs) {
-    dep.subs = newLink;
-    dep.subsTail = newLink;
+    dep.subs = newLink
+    dep.subsTail = newLink
   } else {
-    dep.subsTail!.nextSub = newLink;
-    newLink.prevSub = dep.subsTail;
-    dep.subsTail = newLink;
+    dep.subsTail!.nextSub = newLink
+    newLink.prevSub = dep.subsTail
+    dep.subsTail = newLink
   }
-};
+}
 
 //触发依赖
 export const trigger = (dep: any) => {
   if (dep.subs) {
-    let curSub: Link | undefined = dep.subs;
-    let queue: ReactivityEffect[] = [];
+    let curSub: Link | undefined = dep.subs
+    let queue: ReactivityEffect[] = []
     while (curSub?.sub) {
-      queue.push(curSub.sub as ReactivityEffect);
-      curSub = curSub.nextSub;
+      queue.push(curSub.sub as ReactivityEffect)
+      curSub = curSub.nextSub
     }
     // console.log('待执行队列', queue);
     for (let i = 0; i <= queue.length - 1; i++) {
-      queue[i].notify();
+      queue[i].notify()
     }
   }
-};
+}

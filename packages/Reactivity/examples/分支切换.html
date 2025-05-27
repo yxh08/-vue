@@ -11,8 +11,8 @@
 <button id="ageBtn">age++</button>
 <div id="board"></div>
     <script type="module">
-        import  {ref,effect} from '../../../node_modules/vue/dist/vue.esm-browser.prod.js'
-        // import { ref, effect } from '../dist/reactivity.esm.js'
+        // import  {ref,effect} from '../../../node_modules/vue/dist/vue.esm-browser.prod.js'
+        import { ref, effect } from '../dist/reactivity.esm.js'
         const showName = ref(false)
         const age = ref(18)
         const name = ref('jack')
@@ -35,7 +35,6 @@
         ageBtn.onclick = ()=> {
           age.value ++
           console.dir(age)
-
         }
     </script>
 

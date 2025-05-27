@@ -50,7 +50,7 @@ var collect = (dep, sub) => {
     sub.deps = newLink;
     sub.depsTail = newLink;
   } else {
-    sub.depsTail.nextDep = newLink;
+    sub.deps.nextDep = newLink;
     sub.depsTail = newLink;
   }
   if (!dep.subs) {
