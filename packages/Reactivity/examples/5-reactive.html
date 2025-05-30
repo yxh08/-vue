@@ -13,18 +13,18 @@
     <script type="module">
         // import  {ref,effect} from '../../../node_modules/vue/dist/vue.esm-browser.js'
         import { ref, effect ,reactive} from '../dist/reactivity.esm.js'
-        const showName = ref(false)
-        const age = ref(18)
-        const name = ref('jack')
+        const showName = reactive({status:false})
+        const age = reactive({age:18})
+        const name = reactive({name:'jack'})
 
         const e = effect(()=>{
           console.count('effect')
-          if(showName.value){
-            board.innerHTML = `${name.value}`
-            btn.innerHTML = `展示名字${showName.value}`
+          if(showName.status){
+            board.innerHTML = `${name.name}`
+            btn.innerHTML = `展示名字${showName.status}`
           }else{
-            board.innerHTML = `${age.value}`
-            btn.innerHTML = `展示名字${showName.value}`
+            board.innerHTML = `${age.age}`
+            btn.innerHTML = `展示名字${showName.status}`
           }
         })
 
@@ -33,13 +33,13 @@
         // console.dir(name)
 
         btn.onclick = () => {
-          showName.value = !showName.value
+          showName.status = !showName.status
           console.dir(showName)
 
           // console.dir(e)
         }
         ageBtn.onclick = ()=> {
-          age.value ++
+          age.age ++
         }
     </script>
 

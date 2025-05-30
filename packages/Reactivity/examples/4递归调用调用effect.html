@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-Cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>递归调用effect的问题</title>
+</head>
+<body>
+<div id="board"></div>
+<script type="module">
+    // import  {ref,effect} from '../../../node_modules/vue/dist/vue.esm-browser.js'
+    import { ref, effect } from '../dist/reactivity.esm.js'
+    const count = ref(1)
+    const e =  effect(()=>{
+      count.value ++
+    })
+</script>
+
+</body>
+
+</html>

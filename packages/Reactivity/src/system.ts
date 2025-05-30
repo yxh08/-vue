@@ -1,7 +1,7 @@
 //依赖项
 import { ReactivityEffect } from './effect'
 
-export interface Dep {
+export interface Dependcy {
   subs: Link
   subsTail: Link | undefined
 }
@@ -15,7 +15,7 @@ export interface Link {
   sub: Sub
   nextSub: Link | undefined
   prevSub: Link | undefined
-  dep: Dep
+  dep: Dependcy
   nextDep: Link | undefined
 }
 
@@ -34,30 +34,33 @@ export const collect = (dep, sub) => {
    */
 
   const currentDep =
-    sub.deps && sub.depsTail == undefined ? sub.deps : sub.depsTail?.nextDep
-  // console.log('currentDep',currentDep)
-  if (sub.deps && currentDep?.dep == dep) {
-    //节点对比复用
-    // console.log('复用节点', currentDep);
-    sub.depsTail = currentDep
-    return
-  } else {
-    console.log('未被复用的dep', currentDep)
-  }
+    sub.deps && sub.depsTail == undefined ? sub.deps : sub.depsTail
+  // console.log(dep)
   // 依赖收集
+  if (sub.deps && sub.depsTail == undefined) {
+    //再次收集头节点
+    if (currentDep.dep == dep) {
+      // console.log('复用节点', currentDep)
+      sub.depsTail = currentDep
+      return
+    }
+  } else {
+    // console.log('未复用的节点', currentDep)
+  }
+
   const newLink: Link = {
     sub,
     prevSub: undefined,
     nextSub: undefined,
     dep,
-    nextDep: undefined,
+    nextDep: currentDep?.nextDep,
   }
 
   if (!sub.deps) {
     sub.deps = newLink
     sub.depsTail = newLink
   } else {
-    sub.deps.nextDep = newLink
+    sub.depsTail.nextDep = newLink
     sub.depsTail = newLink
   }
 
@@ -80,7 +83,7 @@ export const trigger = (dep: any) => {
       queue.push(curSub.sub as ReactivityEffect)
       curSub = curSub.nextSub
     }
-    // console.log('待执行队列', queue);
+    console.log('待执行队列', queue)
     for (let i = 0; i <= queue.length - 1; i++) {
       queue[i].notify()
     }
