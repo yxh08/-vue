@@ -1,16 +1,16 @@
 {
-  "name": "reactivity",
+  "name": "vue",
   "version": "1.0.0",
-  "description": "响应式模块",
+  "description": "vue",
   "main": "index.js",
-  "module":"dist/reactivity.esm.js",
+  "module":"dist/vue.esm.js",
   "files": [
     "index.js",
     "dist"
   ],
   "sideEffects":false,
   "buildOptions":{
-    "name":"VueReactivity",
+    "name":"Vue",
     "format":[
       "esm-bundler",
       "esm-browser",

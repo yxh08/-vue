@@ -1,3 +1,6 @@
 export * from './ref'
 export * from './effect'
 export * from './reactive'
+export * from './constance'
+export * from './dep'
+export * from './baseHandlers'

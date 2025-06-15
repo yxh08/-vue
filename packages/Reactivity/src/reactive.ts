@@ -1,64 +1,33 @@
-import { collect, Link, trigger } from './system'
-import { activeSub } from './effect'
+import { isObject } from '../../Shared/src/index'
+import { mutableHandlers } from './baseHandlers'
 
 export function reactive(target: any) {
-  //TODO
-  // if (!Object.is(target)) {
-  //   return target
-  // }
   return createReactiveObject(target)
 }
 
-export interface Dep {
-  subs: Link | undefined
-  subsTail: Link | undefined
-}
-
-export class Dep {
-  subs: Link | undefined
-  subsTail: Link | undefined
-  constructor() {
-    this.subs = undefined
-    this.subsTail = undefined
-  }
-}
-
-const targetMap = new WeakMap()
-
+const proxyMap = new WeakMap() //存放响应式对象的proxy
+const proxySet = new WeakSet() //已经通过代理得到proxy 而再次代理,通过weakSet检查是target是否是是一个proxy.
 function createReactiveObject(target) {
-  return new Proxy(target, {
-    get(target, key, receiver) {
-      let keyMap = targetMap.get(target)
-      if (!keyMap) {
-        targetMap.set(target, (keyMap = new Map()))
-      }
-      let dep = keyMap.get(key)
+  if (!isObject(target)) {
+    console.warn(target, '不是对象类型')
+    return target
+  }
 
-      if (!dep) {
-        keyMap.set(key, (dep = new Dep()))
-      }
-      console.log('dep', dep)
-      if (activeSub) {
-        collect(dep, activeSub)
-      }
+  // target already has corresponding Proxy
+  const existingProxy = proxyMap.get(target)
+  if (existingProxy) {
+    return existingProxy
+  }
 
-      return Reflect.get(target, key)
-    },
-    set(target, key, newValue, receiver) {
-      const res = Reflect.set(target, key, newValue)
+  //target is a proxy
+  const isReactiveProxy = proxySet.has(target)
+  if (isReactiveProxy) {
+    console.log('reactiveProxy', target)
+    return target
+  }
 
-      let keyMap = targetMap.get(target)
-      if (!keyMap) {
-        targetMap.set(target, (keyMap = new Map()))
-      }
-      let dep = keyMap.get(key)
-
-      if (!dep) {
-        keyMap.set(key, (dep = new Dep()))
-      }
-      console.log('dep', dep)
-      trigger(dep)
-      return newValue
-    },
-  })
+  const proxy = new Proxy(target, mutableHandlers)
+  proxyMap.set(target, proxy)
+  proxySet.add(proxy)
+  return proxy
 }

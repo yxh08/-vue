@@ -45,10 +45,9 @@ export class ReactivityEffect {
 }
 
 const endTrack = sub => {
-  console.log('sub', sub)
   let link = sub.depsTail?.nextDep
-  // sub?.depsTail.nextDep ??= undefined
   if (link) {
+    sub.depsTail.nextDep = undefined
     clearDep(link)
   }
 }

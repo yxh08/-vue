@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>8.ref包装对象</title>
+  </head>
+  <body>
+    <div id="change"></div>
+    <script type="module">
+      // import {
+      //   ref,
+      //   effect,
+      //   reactive,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import { effect, reactive, ref } from '../dist/Vue.esm.js'
+
+      const obj = {
+        a: 1,
+      }
+      const state1 = ref(obj)
+      const e = effect(() => {
+        console.log(state1.value.a)
+      })
+
+      setTimeout(() => {
+        state1.value.a = 1
+      }, 500)
+    </script>
+  </body>
+</html>

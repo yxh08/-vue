@@ -1,16 +1,16 @@
 {
-  "name": "reactivity",
+  "name": "shared",
   "version": "1.0.0",
-  "description": "响应式模块",
+  "description": "共享方法",
   "main": "index.js",
-  "module":"dist/reactivity.esm.js",
+  "module":"dist/shared.esm.js",
   "files": [
     "index.js",
     "dist"
   ],
   "sideEffects":false,
   "buildOptions":{
-    "name":"VueReactivity",
+    "name":"VueShared",
     "format":[
       "esm-bundler",
       "esm-browser",

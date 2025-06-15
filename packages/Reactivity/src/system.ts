@@ -72,9 +72,15 @@ export const collect = (dep, sub) => {
     newLink.prevSub = dep.subsTail
     dep.subsTail = newLink
   }
+
+  // console.log('dep', dep)
+  // console.log('sub', sub)
 }
 
-//触发依赖
+/**
+ * 触发依赖
+ * @param dep
+ */
 export const trigger = (dep: any) => {
   if (dep.subs) {
     let curSub: Link | undefined = dep.subs
