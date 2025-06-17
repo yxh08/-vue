@@ -7,14 +7,14 @@ export const mutableHandlers = {
   get(target, key, receiver) {
     goCollect(target, key)
     const res = Reflect.get(target, key, receiver) //receiver === proxy
-    // console.log('getkey:', key, '>>>', 'getres:', res)
+    console.log('key:', key)
 
     if (isRef(res)) {
       return res.value
     }
 
     if (isObject(res)) {
-      // console.log('reactive(res)', res)
+      console.log('isObject', res)
       return reactive(res)
     }
 

@@ -1,5 +1,8 @@
 // packages/Reactivity/src/effect.ts
 var activeSub;
+function setActiveSub(value) {
+  activeSub = value;
+}
 function effect(fn, effectOptions) {
   const e = new ReactivityEffect(fn);
   Object.assign(e, effectOptions);
@@ -21,10 +24,10 @@ var ReactivityEffect = class {
     const prevActiveSub = activeSub;
     try {
       this.depsTail = void 0;
-      activeSub = this;
+      setActiveSub(this);
       return this.fn();
     } finally {
-      activeSub = prevActiveSub;
+      setActiveSub(prevActiveSub);
       this.tracking = false;
       if (this.depsTail) {
         endTrack(this);
@@ -100,12 +103,17 @@ var collect = (dep, sub) => {
   }
 };
 var trigger = (dep) => {
+  console.log("trigger", dep);
   if (dep.subs) {
     let curSub = dep.subs;
     let queue = [];
     while (curSub?.sub) {
-      queue.push(curSub.sub);
-      curSub = curSub.nextSub;
+      if ("update" in curSub.sub) {
+        return;
+      } else {
+        queue.push(curSub.sub);
+        curSub = curSub.nextSub;
+      }
     }
     console.log("\u5F85\u6267\u884C\u961F\u5217", queue);
     for (let i = 0; i <= queue.length - 1; i++) {
@@ -126,6 +134,9 @@ function isObject(value) {
 }
 function hasChanged(newValue, oldValue) {
   return !Object.is(newValue, oldValue);
+}
+function isFunction(value) {
+  return typeof value === "function";
 }
 
 // packages/Reactivity/src/dep.ts
@@ -168,10 +179,12 @@ var mutableHandlers = {
   get(target, key, receiver) {
     goCollect(target, key);
     const res = Reflect.get(target, key, receiver);
+    console.log("key:", key);
     if (isRef(res)) {
       return res.value;
     }
     if (isObject(res)) {
+      console.log("isObject", res);
       return reactive(res);
     }
     return res;
@@ -243,20 +256,78 @@ var RefImpl = class {
 function isRef(value) {
   return !!(value && value["__v_isRef" /* IS_REF */]);
 }
+
+// packages/Reactivity/src/computed.ts
+function computed(getterOrOptions) {
+  let getter;
+  let setter;
+  if (isFunction(getterOrOptions)) {
+    getter = getterOrOptions;
+  } else {
+    getter = getterOrOptions.get;
+    setter = getterOrOptions.set;
+  }
+  return new ComputedImpl(getter, setter);
+}
+var ComputedImpl = class {
+  constructor(getter, setter) {
+    this.getter = getter;
+    this.setter = setter;
+    this.tracking = false;
+  }
+  get value() {
+    this._value = this.update();
+    if (activeSub) {
+      collect(this, activeSub);
+    }
+    console.log("this._value", this._value);
+    return this._value;
+  }
+  set value(newValue) {
+    console.log("set newValue", newValue);
+    if (this.setter) {
+      this.setter(newValue, this._value);
+      trigger(this);
+    } else {
+      console.warn("\u53EA\u8BFB\u5BF9\u8C61");
+    }
+  }
+  //单独
+  update() {
+    const prevActiveSub = activeSub;
+    try {
+      if (this.tracking) return;
+      this.tracking = true;
+      this.depsTail = void 0;
+      setActiveSub(this);
+      return this.getter();
+    } finally {
+      this.tracking = false;
+      setActiveSub(prevActiveSub);
+      if (this.depsTail) {
+        endTrack(this);
+      }
+    }
+  }
+};
 export {
   Dep,
   ReactiveFlags,
   ReactivityEffect,
   RefImpl,
   activeSub,
+  computed,
   effect,
+  endTrack,
   goCollect,
   goTrigger,
   hasChanged,
+  isFunction,
   isObject,
   isRef,
   mutableHandlers,
   reactive,
-  ref
+  ref,
+  setActiveSub
 };
 //# sourceMappingURL=Vue.esm.js.map

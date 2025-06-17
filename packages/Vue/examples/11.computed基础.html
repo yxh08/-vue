@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>11.computed基础</title>
+  </head>
+  <body>
+    <div id="msg"></div>
+    <script type="module">
+      // import {
+      //   ref,
+      //   effect,
+      //   computed,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import { effect, ref, computed } from '../dist/Vue.esm.js'
+
+      const count = ref(1)
+
+      const getDoubleCount = computed({
+        get() {
+          console.count('get')
+          return count.value + 1
+        },
+        set(newValue, oldValue) {
+          console.log('set', newValue)
+          count.value = newValue
+        },
+      })
+
+      // console.log(getDoubleCount.value)
+
+      const e = effect(() => {
+        msg.innerHTML = getDoubleCount.value
+      })
+
+      console.dir(getDoubleCount)
+
+      // setTimeout(() => {
+      //   count.value++
+      //   console.dir(e)
+      // }, 2000)
+    </script>
+  </body>
+</html>

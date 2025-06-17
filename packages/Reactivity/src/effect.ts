@@ -1,5 +1,8 @@
-export let activeSub: ReactivityEffect
+export let activeSub: any
 
+export function setActiveSub(value) {
+  activeSub = value
+}
 export function effect(fn: Function, effectOptions: {}) {
   const e = new ReactivityEffect(fn)
   Object.assign(e, effectOptions)
@@ -22,10 +25,12 @@ export class ReactivityEffect {
     const prevActiveSub = activeSub
     try {
       this.depsTail = undefined
-      activeSub = this
+      // activeSub = this
+      setActiveSub(this)
       return this.fn() //return effect的return
     } finally {
-      activeSub = prevActiveSub
+      // activeSub = prevActiveSub
+      setActiveSub(prevActiveSub)
       this.tracking = false
       // console.count('依赖收集次数')
 
@@ -44,7 +49,7 @@ export class ReactivityEffect {
   }
 }
 
-const endTrack = sub => {
+export const endTrack = sub => {
   let link = sub.depsTail?.nextDep
   if (link) {
     sub.depsTail.nextDep = undefined

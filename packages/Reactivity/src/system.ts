@@ -9,6 +9,7 @@ export interface Dependcy {
 export interface Sub extends ReactivityEffect {
   deps: Link
   depsTail: Link | undefined
+  tracking: boolean
 }
 
 export interface Link {
@@ -79,15 +80,22 @@ export const collect = (dep, sub) => {
 
 /**
  * 触发依赖
+ * 当遇到link.sub == computedImpl
+ * 调用辅助函数processComputedUpdate特殊处理
  * @param dep
  */
 export const trigger = (dep: any) => {
+  console.log('trigger', dep)
   if (dep.subs) {
     let curSub: Link | undefined = dep.subs
     let queue: ReactivityEffect[] = []
     while (curSub?.sub) {
-      queue.push(curSub.sub as ReactivityEffect)
-      curSub = curSub.nextSub
+      if ('update' in curSub.sub) {
+        return
+      } else {
+        queue.push(curSub.sub as ReactivityEffect)
+        curSub = curSub.nextSub
+      }
     }
     console.log('待执行队列', queue)
     for (let i = 0; i <= queue.length - 1; i++) {
