@@ -27,18 +27,16 @@
         },
       })
 
-      // console.log(getDoubleCount.value)
+      console.log(getDoubleCount.value)
 
       const e = effect(() => {
         msg.innerHTML = getDoubleCount.value
       })
 
-      console.dir(getDoubleCount)
-
-      // setTimeout(() => {
-      //   count.value++
-      //   console.dir(e)
-      // }, 2000)
+      setTimeout(() => {
+        count.value++
+        console.dir(e)
+      }, 2000)
     </script>
   </body>
 </html>

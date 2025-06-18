@@ -24,18 +24,24 @@ class ComputedImpl implements Dependcy, Sub {
   depsTail: Link | undefined
 
   tracking = false
+
+  dirty: boolean = true
   constructor(
     public getter,
     private setter,
   ) {}
   get value() {
-    this._value = this.update()
+    if (this.dirty) {
+      //true 脏
+      this._value = this.update()
+      //缓存效果 false 干净
+      this.dirty = false
+    }
 
     //自身为dep时,收集sub
     if (activeSub) {
       collect(this, activeSub)
     }
-    console.log('this._value', this._value)
     return this._value
   }
 

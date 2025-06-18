@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <script>
+      const target = {
+        a: 2,
+      }
+
+      const proxy = new Proxy(target, {
+        get(target, key, receiver) {
+          console.log('key', key)
+          return Reflect.get(target, key, receiver)
+        },
+        set(target, p, newValue, receiver) {
+          Reflect.set(target, p, newValue)
+        },
+      })
+
+      // console.log('target', target.a)
+      console.log('proxy', proxy.a)
+      // proxy.a = 10
+      // console.log('target.a == 10 ?', target.a)
+      // console.log('proxy.a == 10?', proxy.a)
+    </script>
+  </body>
+</html>

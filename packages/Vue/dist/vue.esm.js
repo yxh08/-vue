@@ -102,6 +102,12 @@ var collect = (dep, sub) => {
     dep.subsTail = newLink;
   }
 };
+var processComputedUpdate = (sub) => {
+  if (sub.subs) {
+    sub.update();
+    trigger(sub);
+  }
+};
 var trigger = (dep) => {
   console.log("trigger", dep);
   if (dep.subs) {
@@ -109,11 +115,12 @@ var trigger = (dep) => {
     let queue = [];
     while (curSub?.sub) {
       if ("update" in curSub.sub) {
-        return;
+        curSub.sub.dirty = true;
+        processComputedUpdate(curSub.sub);
       } else {
         queue.push(curSub.sub);
-        curSub = curSub.nextSub;
       }
+      curSub = curSub.nextSub;
     }
     console.log("\u5F85\u6267\u884C\u961F\u5217", queue);
     for (let i = 0; i <= queue.length - 1; i++) {
@@ -274,13 +281,16 @@ var ComputedImpl = class {
     this.getter = getter;
     this.setter = setter;
     this.tracking = false;
+    this.dirty = true;
   }
   get value() {
-    this._value = this.update();
+    if (this.dirty) {
+      this._value = this.update();
+      this.dirty = false;
+    }
     if (activeSub) {
       collect(this, activeSub);
     }
-    console.log("this._value", this._value);
     return this._value;
   }
   set value(newValue) {

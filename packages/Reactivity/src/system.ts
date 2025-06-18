@@ -84,6 +84,13 @@ export const collect = (dep, sub) => {
  * 调用辅助函数processComputedUpdate特殊处理
  * @param dep
  */
+
+const processComputedUpdate = sub => {
+  if (sub.subs) {
+    sub.update()
+    trigger(sub)
+  }
+}
 export const trigger = (dep: any) => {
   console.log('trigger', dep)
   if (dep.subs) {
@@ -91,11 +98,12 @@ export const trigger = (dep: any) => {
     let queue: ReactivityEffect[] = []
     while (curSub?.sub) {
       if ('update' in curSub.sub) {
-        return
+        curSub.sub.dirty = true
+        processComputedUpdate(curSub.sub)
       } else {
         queue.push(curSub.sub as ReactivityEffect)
-        curSub = curSub.nextSub
       }
+      curSub = curSub.nextSub
     }
     console.log('待执行队列', queue)
     for (let i = 0; i <= queue.length - 1; i++) {
