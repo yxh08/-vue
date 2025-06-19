@@ -102,14 +102,12 @@ var collect = (dep, sub) => {
     dep.subsTail = newLink;
   }
 };
-var processComputedUpdate = (sub) => {
-  if (sub.subs) {
-    sub.update();
-    trigger(sub);
+var processComputedUpdate = (computedImpl) => {
+  if (computedImpl.subs && computedImpl.update()) {
+    trigger(computedImpl);
   }
 };
 var trigger = (dep) => {
-  console.log("trigger", dep);
   if (dep.subs) {
     let curSub = dep.subs;
     let queue = [];
@@ -122,7 +120,6 @@ var trigger = (dep) => {
       }
       curSub = curSub.nextSub;
     }
-    console.log("\u5F85\u6267\u884C\u961F\u5217", queue);
     for (let i = 0; i <= queue.length - 1; i++) {
       queue[i].notify();
     }
@@ -248,16 +245,16 @@ var RefImpl = class {
     this._value = isObject(value) ? reactive(value) : value;
   }
   get value() {
-    console.log("\u6536\u96C6\u4F9D\u8D56", activeSub);
     if (activeSub) {
       collect(this, activeSub);
     }
     return this._value;
   }
   set value(newValue) {
-    this._value = isObject(newValue) ? reactive(newValue) : newValue;
-    console.log("\u89E6\u53D1\u4F9D\u8D56");
-    trigger(this);
+    if (hasChanged(newValue, this.value)) {
+      this._value = isObject(newValue) ? reactive(newValue) : newValue;
+      trigger(this);
+    }
   }
 };
 function isRef(value) {
@@ -285,8 +282,7 @@ var ComputedImpl = class {
   }
   get value() {
     if (this.dirty) {
-      this._value = this.update();
-      this.dirty = false;
+      this.update();
     }
     if (activeSub) {
       collect(this, activeSub);
@@ -304,13 +300,16 @@ var ComputedImpl = class {
   }
   //单独
   update() {
+    const oldValue = this._value;
     const prevActiveSub = activeSub;
     try {
       if (this.tracking) return;
       this.tracking = true;
       this.depsTail = void 0;
       setActiveSub(this);
-      return this.getter();
+      this._value = this.getter();
+      this.dirty = false;
+      return hasChanged(this._value, oldValue) ? true : false;
     } finally {
       this.tracking = false;
       setActiveSub(prevActiveSub);

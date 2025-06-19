@@ -13,10 +13,10 @@
             "state": {
               "type": "excalidraw",
               "state": {
-                "file": "Excalidraw/computed示意图.md"
+                "file": "Excalidraw/双链表.md"
               },
               "icon": "excalidraw-icon",
-              "title": "computed示意图"
+              "title": "双链表"
             }
           }
         ]
@@ -169,9 +169,10 @@
   },
   "active": "ce3365be2b559ebe",
   "lastOpenFiles": [
+    "Excalidraw/computed示意图.md",
+    "ref-cpmputed-effect.png.png",
     "Excalidraw/分支切换.md",
     "Excalidraw/深层reactive示意图.md",
-    "Excalidraw/computed示意图.md",
     "Excalidraw/reactive-targetsMap.md",
     "Excalidraw/双链表.md",
     "Excalidraw/Drawing 2025-06-16 10.18.16.excalidraw.md",

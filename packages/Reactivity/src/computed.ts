@@ -1,5 +1,5 @@
 import { collect, Dependcy, Link, Sub, trigger } from './system'
-import { isFunction } from '../../Shared/src'
+import { hasChanged, isFunction } from '../../Shared/src'
 import { activeSub, endTrack, setActiveSub } from './effect'
 
 export function computed(getterOrOptions) {
@@ -33,11 +33,8 @@ class ComputedImpl implements Dependcy, Sub {
   get value() {
     if (this.dirty) {
       //true 脏
-      this._value = this.update()
-      //缓存效果 false 干净
-      this.dirty = false
+      this.update()
     }
-
     //自身为dep时,收集sub
     if (activeSub) {
       collect(this, activeSub)
@@ -57,13 +54,22 @@ class ComputedImpl implements Dependcy, Sub {
   //单独
   update() {
     // 将自身当做sub时,收集dep
+
+    const oldValue = this._value
     const prevActiveSub = activeSub
     try {
       if (this.tracking) return
       this.tracking = true
       this.depsTail = undefined
       setActiveSub(this)
-      return this.getter()
+      this._value = this.getter()
+      /**
+       * 每次执行完update后,将_value标记为干净值,
+       * 只有依赖的dep被set后,通过链表节点找到这个computed重新获取新值 前!
+       * 才会标记为脏值.这时再次get value才会重新执行update,否则get value 都是获取的缓存数据,不会真正执行computed中的回调
+       */
+      this.dirty = false
+      return hasChanged(this._value, oldValue) ? true : false
     } finally {
       this.tracking = false
       setActiveSub(prevActiveSub)

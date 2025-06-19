@@ -41,7 +41,6 @@ export const collect = (dep, sub) => {
   if (sub.deps && sub.depsTail == undefined) {
     //再次收集头节点
     if (currentDep.dep == dep) {
-      // console.log('复用节点', currentDep)
       sub.depsTail = currentDep
       return
     }
@@ -85,14 +84,16 @@ export const collect = (dep, sub) => {
  * @param dep
  */
 
-const processComputedUpdate = sub => {
-  if (sub.subs) {
-    sub.update()
-    trigger(sub)
+const processComputedUpdate = computedImpl => {
+  /**
+   *  只有在computed上有subs 并且 computed.update
+   *  后数据发生变化才会 通知computed 的依赖sub更新
+   */
+  if (computedImpl.subs && computedImpl.update()) {
+    trigger(computedImpl)
   }
 }
 export const trigger = (dep: any) => {
-  console.log('trigger', dep)
   if (dep.subs) {
     let curSub: Link | undefined = dep.subs
     let queue: ReactivityEffect[] = []
@@ -105,7 +106,7 @@ export const trigger = (dep: any) => {
       }
       curSub = curSub.nextSub
     }
-    console.log('待执行队列', queue)
+    // console.log('待执行队列', queue)
     for (let i = 0; i <= queue.length - 1; i++) {
       queue[i].notify()
     }

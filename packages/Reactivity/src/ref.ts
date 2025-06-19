@@ -2,7 +2,7 @@ import { activeSub } from './effect'
 import { collect, Link, trigger } from './system'
 import { ReactiveFlags } from './constance'
 import { reactive } from './reactive'
-import { isObject } from '../../Shared/src/index'
+import { hasChanged, isObject } from '../../Shared/src/index'
 
 export const ref = (value: any) => {
   return new RefImpl(value)
@@ -19,17 +19,19 @@ export class RefImpl {
   }
   get value() {
     //收集依赖
-    console.log('收集依赖', activeSub)
+    // console.log('收集依赖', activeSub)
     if (activeSub) {
       collect(this, activeSub)
     }
     return this._value
   }
   set value(newValue) {
-    this._value = isObject(newValue) ? reactive(newValue) : newValue
-    //触发依赖
-    console.log('触发依赖')
-    trigger(this)
+    if (hasChanged(newValue, this.value)) {
+      this._value = isObject(newValue) ? reactive(newValue) : newValue
+      //触发依赖
+      // console.log('触发依赖')
+      trigger(this)
+    }
   }
 }
 
