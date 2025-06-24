@@ -21,6 +21,7 @@ export class RefImpl {
     //收集依赖
     // console.log('收集依赖', activeSub)
     if (activeSub) {
+      console.log('activeSub.tracking', activeSub.tracking)
       collect(this, activeSub)
     }
     return this._value

@@ -71,6 +71,7 @@ var clearDep = (link) => {
 
 // packages/Reactivity/src/system.ts
 var collect = (dep, sub) => {
+  console.log("\u6536\u96C6\u4F9D\u8D56", dep, sub);
   const currentDep = sub.deps && sub.depsTail == void 0 ? sub.deps : sub.depsTail;
   if (sub.deps && sub.depsTail == void 0) {
     if (currentDep.dep == dep) {
@@ -93,10 +94,13 @@ var collect = (dep, sub) => {
     sub.depsTail.nextDep = newLink;
     sub.depsTail = newLink;
   }
+  console.log(1);
   if (!dep.subs) {
+    console.log(2);
     dep.subs = newLink;
     dep.subsTail = newLink;
   } else {
+    console.log(3);
     dep.subsTail.nextSub = newLink;
     newLink.prevSub = dep.subsTail;
     dep.subsTail = newLink;
@@ -120,6 +124,7 @@ var trigger = (dep) => {
       }
       curSub = curSub.nextSub;
     }
+    console.log("\u5F85\u6267\u884C\u961F\u5217", queue);
     for (let i = 0; i <= queue.length - 1; i++) {
       queue[i].notify();
     }
@@ -246,6 +251,7 @@ var RefImpl = class {
   }
   get value() {
     if (activeSub) {
+      console.log("activeSub.tracking", activeSub.tracking);
       collect(this, activeSub);
     }
     return this._value;

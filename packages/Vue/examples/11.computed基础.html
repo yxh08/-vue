@@ -12,12 +12,18 @@
       //   effect,
       //   computed,
       // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+
       import { effect, ref, computed } from '../dist/Vue.esm.js'
 
       const count = ref(1)
       effect(() => {
-        console.log(count.value++)
+        count.value = count.value + 3
       })
+
+      // count.value++
+      // count.value++
+      // count.value++
+      // count.value++
 
       console.dir(count)
 
