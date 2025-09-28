@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>11.computed基础</title>
+  </head>
+  <body>
+    <div id="msg"></div>
+    <script type="module">
+      // import {
+      //   ref,
+      //   effect,
+      //   computed,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+
+      import { effect, ref, toRefs } from '../dist/Vue.esm.js'
+
+      const obj = ref({
+        name: 'yxh',
+      })
+
+      let obj_ = toRefs(obj)
+      console.log(obj_)
+
+      // effect(() => {
+      //   console.log(obj_.value)
+      // })
+
+      // setTimeout(() => (name.value = 'yxh2'))
+    </script>
+  </body>
+</html>

@@ -1,16 +1,16 @@
 {
-  "name": "@vue/reactivity",
+  "name": "@vue/runtime-dom",
   "version": "1.0.0",
-  "description": "响应式模块",
-  "main": "dist/reactivity.cjs.js",
-  "module": "dist/reactivity.esm.js",
+  "description": "浏览器运行时",
+  "main": "dist/runtime-dom.cjs.js",
+  "module": "dist/runtime-dom.esm.js",
   "files": [
     "index.js",
     "dist"
   ],
   "sideEffects": false,
   "buildOptions": {
-    "name": "VueReactivity",
+    "name": "RuntimeDOM",
     "formats": [
       "esm-bundler",
       "esm-browser",
@@ -19,6 +19,7 @@
     ]
   },
   "dependencies": {
+    "@vue/runtime-core": "workspace:^",
     "@vue/shared": "workspace:^"
   }
 }

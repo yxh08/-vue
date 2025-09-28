@@ -1,4 +1,4 @@
-import { isObject } from '../../Shared/src/index'
+import { isObject } from '../../shared/src/index'
 import { mutableHandlers } from './baseHandlers'
 
 export function reactive(target: any) {

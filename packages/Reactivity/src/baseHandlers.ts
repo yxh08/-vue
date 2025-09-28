@@ -1,20 +1,18 @@
 import { goCollect, goTrigger } from './dep'
 import { isRef } from './ref'
-import { hasChanged, isObject } from '../../Shared/src'
+import { hasChanged, isObject } from '../../shared/src'
 import { reactive } from './reactive'
 
 export const mutableHandlers = {
   get(target, key, receiver) {
     goCollect(target, key)
     const res = Reflect.get(target, key, receiver) //receiver === proxy
-    console.log('key:', key)
 
     if (isRef(res)) {
       return res.value
     }
 
     if (isObject(res)) {
-      console.log('isObject', res)
       return reactive(res)
     }
 

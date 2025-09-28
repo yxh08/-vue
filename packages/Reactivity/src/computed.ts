@@ -1,5 +1,5 @@
 import { collect, Dependcy, Link, Sub, trigger } from './system'
-import { hasChanged, isFunction } from '../../Shared/src'
+import { hasChanged, isFunction } from '../../shared/src'
 import { activeSub, endTrack, setActiveSub } from './effect'
 
 export function computed(getterOrOptions) {

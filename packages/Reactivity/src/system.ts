@@ -27,7 +27,6 @@ export interface Link {
  *  @Param sub 订阅者 ReactivityEffect
  */
 export const collect = (dep, sub) => {
-  console.log('收集依赖', dep, sub)
   /**
    * 避免依赖重复收集
    *  如果sub.deps存在并且sub.depsTail = undefined
@@ -65,20 +64,14 @@ export const collect = (dep, sub) => {
     sub.depsTail = newLink
   }
 
-  console.log(1)
   if (!dep.subs) {
-    console.log(2)
     dep.subs = newLink
     dep.subsTail = newLink
   } else {
-    console.log(3)
     dep.subsTail!.nextSub = newLink
     newLink.prevSub = dep.subsTail
     dep.subsTail = newLink
   }
-
-  // console.log('dep', dep)
-  // console.log('sub', sub)
 }
 
 /**

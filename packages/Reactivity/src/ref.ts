@@ -2,7 +2,7 @@ import { activeSub } from './effect'
 import { collect, Link, trigger } from './system'
 import { ReactiveFlags } from './constance'
 import { reactive } from './reactive'
-import { hasChanged, isObject } from '../../Shared/src/index'
+import { hasChanged, isObject } from '../../shared/src'
 
 export const ref = (value: any) => {
   return new RefImpl(value)
@@ -21,7 +21,6 @@ export class RefImpl {
     //收集依赖
     // console.log('收集依赖', activeSub)
     if (activeSub) {
-      console.log('activeSub.tracking', activeSub.tracking)
       collect(this, activeSub)
     }
     return this._value
@@ -36,6 +35,37 @@ export class RefImpl {
   }
 }
 
-export function isRef(value) {
+export function isRef(value: any) {
   return !!(value && value[ReactiveFlags.IS_REF])
+}
+
+export function toRef(object, key) {
+  return new ObjectRefImpl(object, key)
+}
+
+export function toRefs(object) {
+  const keys = Object.keys(object)
+  console.log(keys)
+  // return new ObjectRefImpl(object)
+}
+
+export function proxyRefs(target) {
+  return new Proxy(target, {
+    get(target, key, receiver) {},
+    set(target, key, newValue, receiver) {},
+  })
+}
+
+class ObjectRefImpl {
+  [ReactiveFlags.IS_REF] = true
+  constructor(
+    public _object,
+    public _key,
+  ) {}
+  get value() {
+    return this._object[this._key]
+  }
+  set value(newValue) {
+    this._object[this._key] = newValue
+  }
 }
