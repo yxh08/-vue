@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>10.reactive包装深层的对象</title>
+  </head>
+  <body>
+    <div id="change"></div>
+    <script type="module">
+      // import {
+      //   ref,
+      //   effect,
+      //   reactive,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import { effect, reactive, ref } from '..'
+
+      const state1 = reactive({ a: { b: { c: 3 } } })
+      const e = effect(() => {
+        console.log('effect', state1.a.b.c)
+      })
+
+      // setTimeout(() => {
+      //   console.log('==========state1.a.b =', state1.a.b)
+      //   state1.a.b = 555
+      // }, 500)
+
+      // console.log('=================test==================')
+      //
+      // const obj = { a: { b: { c: 3 } } }
+      //
+      // const proxy = new Proxy(obj, {
+      //   get(target, key, receiver) {
+      //     console.log('get', target, key)
+      //     return Reflect.get(target, key, receiver)
+      //   },
+      //   set(target, key, newValue, receiver) {
+      //     console.log('set', target, key)
+      //     const res = Reflect.set(target, key, newValue, receiver)
+      //     return res
+      //   },
+      // })
+      //
+      // // console.log(proxy.a.b)
+      // console.log((proxy.a.b = 4))
+    </script>
+  </body>
+</html>

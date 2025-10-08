@@ -10,6 +10,9 @@ export const nodeOps = {
       parentNode.removeChild(el)
     }
   },
+  createElement(tag) {
+    return document.createElement(tag)
+  },
   //设置元素的text
   setElementText(el, text) {
     el.textContent = text

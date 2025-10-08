@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <script type="module">
+      // import {
+      //   createRenderer,
+      //   h,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      // import { effect, reactive, ref } from '../dist/vue.esm.js'
+      import {
+        renderOptions,
+        createRenderer,
+        render,
+        h,
+      } from '../dist/vue.esm.js'
+
+      const node1 = h(
+        'div',
+
+        [
+          h('div', { key: 'a', style: { color: 'red' } }, 'a'),
+          h('div', { key: 'b', style: { color: 'red' } }, 'b'),
+          h('div', { key: 'c', style: { color: 'red' } }, 'c'),
+          h('div', { key: 'd', style: { color: 'red' } }, 'd'),
+          h('div', { key: 'e', style: { color: 'red' } }, 'e'),
+        ],
+      )
+      const node2 = h(
+        'div',
+
+        [
+          h('div', { key: 'a', style: { color: 'blue' } }, 'a'),
+          h('div', { key: 'c', style: { color: 'blue' } }, 'c'),
+          h('div', { key: 'd', style: { color: 'green' } }, 'd'),
+          h('div', { key: 'g', style: { color: 'red' } }, 'g'),
+          h('div', { key: 'b', style: { color: 'blue' } }, 'b'),
+          h('div', { key: 'e', style: { color: 'blue' } }, 'e'),
+        ],
+      )
+      render(node1, document.body)
+
+      setTimeout(() => {
+        render(node2, document.body)
+      }, 2000)
+    </script>
+  </body>
+</html>

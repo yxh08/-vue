@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-Cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>6.reactive以及receiver的运用</title>
+  </head>
+  <body>
+    <button id="count">show</button>
+    <script type="module">
+      // import {
+      //   ref,
+      //   effect,
+      //   reactive,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import { effect, reactive, ref } from '..'
+
+      const show = reactive({
+        count: 1,
+        get count_() {
+          //当访问 count_时 实际是访问count 在reflect 中传入receiver将指向
+          return this.count
+        },
+      })
+      const e2 = effect(() => {
+        count.innerHTML = show.count_
+      })
+
+      setTimeout(() => {
+        show.count = 3
+      }, 2000)
+    </script>
+  </body>
+</html>

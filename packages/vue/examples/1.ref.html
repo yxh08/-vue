@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ref123</title>
+  </head>
+  <body>
+    <script type="module">
+      // import {
+      //   ref,
+      //   effect,
+      //   reactive,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import { effect, reactive, ref } from '..'
+      const count = ref(1)
+      const flag = ref(true)
+
+      const e = effect(() => {
+        console.log('effect1 count', count.value)
+      })
+      effect(() => {
+        console.log('effect2 count', count.value)
+      })
+      setTimeout(() => {
+        count.value++
+        console.dir(e)
+      }, 1000)
+    </script>
+  </body>
+</html>

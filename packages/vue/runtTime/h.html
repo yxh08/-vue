@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <script type="module">
+      import { createRenderer } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import { renderOptions, h } from '../dist/vue.esm.js'
+
+      const { render } = createRenderer(renderOptions)
+
+      const node1 = h(
+        'div',
+        {
+          onClick: () => {
+            console.log('click')
+          },
+          id: 1,
+        },
+        'test',
+      )
+      const node2 = h('div', { id: 2 }, 'hello world')
+
+      console.log('node1', node1)
+
+      // render(node2, document.body)
+
+      // setTimeout(() => {
+      //   render(node1, document.body)
+      // }, 2000)
+    </script>
+  </body>
+</html>
