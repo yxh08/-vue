@@ -26,6 +26,10 @@ export function isString(value) {
   return typeof value === 'string'
 }
 
+export function isNumber(value) {
+  return typeof value === 'number'
+}
+
 export function isSameVNodeType(n1, n2) {
-  return n1.type === n2.type && n1.key === n2.key
+  return n1.type === n2?.type && n1.key === n2?.key
 }

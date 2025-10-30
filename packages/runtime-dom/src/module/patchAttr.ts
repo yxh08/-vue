@@ -1,6 +1,6 @@
 export function patchAttr(el, prop, prevValue, nextValue) {
   if (!nextValue) {
-    return el.removeAttribute(prop)
+    return el?.removeAttribute(prop)
   }
-  el.setAttribute(prop, nextValue)
+  el?.setAttribute(prop, nextValue)
 }

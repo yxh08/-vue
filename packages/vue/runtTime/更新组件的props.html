@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>异步渲染</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <button id="btn">count ++</button>
+    <script type="module">
+      // import {
+      //   createRenderer,
+      //   ref,
+      //   h,
+      //   createApp,
+      //   reactive,
+      //   effect,
+      //   watch,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import {
+        renderOptions,
+        createRenderer,
+        render,
+        h,
+        ref,
+        reactive,
+        createApp,
+      } from '../dist/vue.esm.js'
+
+      const Child = {
+        props: ['count'],
+        setup(props) {
+          return {
+            props,
+          }
+        },
+        render() {
+          console.log('$props', this.$props)
+          return h('span', `我是子组建2,count:${this.props.count}`)
+        },
+      }
+
+      const Comp = {
+        setup(props, { attrs }) {
+          const count = ref(1)
+          btn.addEventListener('click', () => {
+            count.value++
+          })
+          return {
+            count,
+          }
+        },
+        render() {
+          return h(
+            'p',
+            {
+              style: {
+                color: 'red',
+              },
+            },
+            [h('div', '我是子组件1'), h(Child, { count: this.count })],
+          )
+        },
+      }
+
+      const app = createApp(Comp, {
+        style: { border: '1px solid green' },
+      })
+      app.mount('#app')
+    </script>
+  </body>
+</html>

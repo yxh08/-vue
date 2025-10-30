@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>生命周期</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      // import {
+      //   h,
+      //   ref,
+      //   render,
+      //   createApp,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import {
+        createApp,
+        renderOptions,
+        createRenderer,
+        render,
+        h,
+        getCurrentInstance,
+        ref,
+        Text,
+      } from '../dist/vue.esm.js'
+
+      function comp(props, { emit, slots }) {
+        console.log('slots ===>', slots)
+        console.log('props ===>', props)
+        return h('div', [slots.header(), `函数式组件:${props.count}`])
+      }
+      comp.props = ['count']
+
+      const App = {
+        setup() {
+          const count = ref(0)
+          return { count }
+        },
+        render() {
+          return h(
+            'div',
+            {
+              style: { cursor: 'pointer', color: 'red' },
+              onClick: () => {
+                this.count++
+                console.log(this.count.value)
+              },
+            },
+            [
+              'App组件',
+              h(
+                comp,
+                {
+                  count: this.count,
+                  onFoo() {
+                    console.log('foo')
+                  },
+                },
+                {
+                  header: () => h('div', '我来组成头部'),
+                },
+              ),
+            ],
+          )
+        },
+      }
+
+      const app = createApp(App)
+      app.mount('#app')
+    </script>
+  </body>
+</html>

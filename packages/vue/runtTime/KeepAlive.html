@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>KeppAlive</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <button id="btn">切换</button>
+    <script type="module">
+      // import {
+      //   h,
+      //   ref,
+      //   render,
+      //   createApp,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import {
+        createApp,
+        h,
+        getCurrentInstance,
+        ref,
+        onMounted,
+        onUnmounted,
+        KeepAlive,
+      } from '../dist/vue.esm.js'
+
+      const Input1 = {
+        name: 'Input1',
+        setup() {
+          onMounted(() => {
+            console.log('Input1挂载')
+          })
+          onUnmounted(() => {
+            console.log('Input1卸载')
+          })
+          return () => h('div', ['input1', h('input')])
+        },
+      }
+
+      const Input2 = {
+        name: 'Input2',
+        setup() {
+          onMounted(() => {
+            console.log('Input2挂载')
+          })
+          onUnmounted(() => {
+            console.log('Input2卸载')
+          })
+          return () => h('div', ['input2', h('input')])
+        },
+      }
+
+      const Input3 = {
+        name: 'Input3',
+        setup() {
+          onMounted(() => {
+            console.log('Input3挂载')
+          })
+          onUnmounted(() => {
+            console.log('Input3卸载')
+          })
+          return () => h('div', ['input3', h('input')])
+        },
+      }
+
+      const App = {
+        name: 'App',
+        setup() {
+          const components = [Input1, Input2, Input3]
+          const currentComp = ref(0)
+
+          btn.addEventListener('click', () => {
+            currentComp.value =
+              currentComp.value < 2 ? currentComp.value + 1 : 0
+          })
+          return () =>
+            h(KeepAlive, { max: 3 }, () => h(components[currentComp.value]))
+        },
+      }
+
+      const app = createApp(App)
+      app.mount('#app')
+    </script>
+  </body>
+</html>

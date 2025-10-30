@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <script type="module">
+      // import {
+      //   createRenderer,
+      //   h,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      // import { effect, reactive, ref } from '../dist/vue.esm.js'
+      import {
+        renderOptions,
+        createRenderer,
+        render,
+        h,
+        Text,
+      } from '../dist/vue.esm.js'
+
+      //这里走的是patchChildren 所以要把数组中的字符串标准化为vnode格式
+      const node1 = h('div', ['hello ', 'world']) //这个是通过patchElement 将字符串标准化为vnode
+      const node2 = h('div', ['world ', 'hello']) //这个需要在patchChildren的patchKeyedChildren中,将新的数组中的字符串标准化为vnode
+
+      render(node1, document.body)
+
+      setTimeout(() => {
+        render(node2, document.body)
+      }, 2000)
+    </script>
+  </body>
+</html>

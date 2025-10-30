@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ref和expose</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      // import {
+      //   h,
+      //   ref,
+      //   render,
+      //   createApp,
+      //   onMounted,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import {
+        createApp,
+        renderOptions,
+        createRenderer,
+        render,
+        h,
+        getCurrentInstance,
+        ref,
+        Text,
+        onBeforeMount,
+        onMounted,
+        onBeforeUpdate,
+        onUpdated,
+        onBeforeUnmount,
+        onUnmounted,
+      } from '../dist/vue.esm.js'
+
+      const Child1 = {
+        setup(_, { expose }) {
+          expose({ a: ref(1) })
+          return () => {
+            return h('div', null, '状态组件1')
+          }
+        },
+      }
+      const Child2 = {
+        setup(_, { expose }) {
+          expose({ a: ref(1) })
+          return () => {
+            return h('div', null, '状态组件2')
+          }
+        },
+      }
+
+      const comp = {
+        setup() {
+          const elRef = ref()
+          const ChildRef1 = ref()
+          const vm = getCurrentInstance()
+
+          const flag = ref(true)
+
+          // onMounted(() => {
+          //   setTimeout(() => {
+          //     console.log('elRef.value ===>', elRef.value)
+          //     console.log('ChildRef1.value ===>', ChildRef1.value)
+          //     console.log('ChildRef2 ===>', vm.refs['ChildRef2'])
+          //   }, 5000)
+          // })
+
+          return () =>
+            h(
+              'div',
+              {
+                onClick: () => {
+                  flag.value = !flag.value
+                },
+              },
+              [
+                flag.value ? h('div', { ref: elRef }, '元素组件') : '',
+                flag.value ? h(Child1, { ref: ChildRef1 }) : '',
+                flag.value ? h(Child2, { ref: 'ChildRef2' }) : '',
+              ],
+            )
+        },
+      }
+
+      const app = createApp(comp)
+      app.mount('#app')
+    </script>
+  </body>
+</html>

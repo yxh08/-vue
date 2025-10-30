@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>slots</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      // import {
+      //   h,
+      //   ref,
+      //   render,
+      //   createApp,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import {
+        createApp,
+        renderOptions,
+        createRenderer,
+        render,
+        h,
+        getCurrentInstance,
+        ref,
+        Text,
+      } from '../dist/vue.esm.js'
+
+      const Child = {
+        setup(props, { slots, emit, attrs }) {
+          emit('foo')
+          console.log('attrs ===>', attrs)
+          return function () {
+            console.log('slots', slots)
+            return h('div', { style: { color: 'red' } }, [
+              h('div', '我是子组件'),
+              slots.header(),
+            ])
+          }
+        },
+      }
+
+      const comp = {
+        setup() {
+          const flag = ref(true)
+          return () =>
+            h(
+              'div',
+              {
+                onClick: () => {
+                  flag.value = !flag.value
+                  console.log(flag)
+                },
+              },
+              h(
+                Child,
+                {
+                  test: 1,
+                  onFoo() {
+                    console.log('foo')
+                  },
+                },
+                {
+                  header: flag.value
+                    ? () => h('h', { key: 1 }, `插槽1${flag.value}`)
+                    : () => h('span', { key: 2 }, `插槽2${flag.value}`),
+                },
+              ),
+            )
+        },
+      }
+
+      createApp(comp).mount('#app')
+    </script>
+  </body>
+</html>

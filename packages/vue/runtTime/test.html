@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>test</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import {
+        createRenderer,
+        ref,
+        h,
+        createApp,
+        reactive,
+        effect,
+        watch,
+      } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+
+      const Child = {
+        setup(props, { emit, attrs }) {
+          console.log('attrs ===>', attrs)
+
+          attrs.onFoo(321)
+          emit('foo', 123)
+
+          return () => h('div', 'test')
+        },
+      }
+
+      const App = {
+        setup() {
+          return () =>
+            h(Child, {
+              onFoo(...args) {
+                console.log('foo', ...args)
+              },
+            })
+        },
+      }
+
+      const app = createApp(App).mount('#app')
+    </script>
+  </body>
+</html>

@@ -1,10 +1,11 @@
 import { goCollect, goTrigger } from './dep'
 import { isRef } from './ref'
-import { hasChanged, isObject } from '@vue/shared/src/utils'
+import { hasChanged, isObject } from '@vue/shared/src/index'
 import { reactive } from './reactive'
 
 export const mutableHandlers = {
   get(target, key, receiver) {
+    console.log('goCollect', target, key)
     goCollect(target, key)
     const res = Reflect.get(target, key, receiver) //receiver === proxy
 

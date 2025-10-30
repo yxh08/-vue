@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <button id="btn">++</button>
+    <script type="module">
+      // import {
+      //   createRenderer,
+      //   ref,
+      //   h,
+      //   createApp,
+      //   reactive,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import {
+        renderOptions,
+        createRenderer,
+        render,
+        h,
+        ref,
+        reactive,
+        createApp,
+      } from '../dist/vue.esm.js'
+
+      const Comp = {
+        props: {
+          test: String,
+        },
+        setup(props, { attrs }) {
+          console.log('props ===>', props)
+          const count = ref(1)
+          btn.addEventListener('click', () => {
+            count.value++
+          })
+          return () => {
+            return h(
+              'div',
+              {
+                onClick: () => {
+                  count.value++
+                },
+                style: {
+                  color: 'red',
+                },
+              },
+              `count:${count.value}`,
+            )
+          }
+        },
+      }
+
+      const app = createApp(Comp, {
+        test: 'test',
+        style: { border: '1px solid green' },
+      })
+      app.mount('#app')
+    </script>
+  </body>
+</html>

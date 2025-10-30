@@ -18,27 +18,22 @@ export class ReactivityEffect {
   deps: Link | undefined = undefined
   depsTail: Link | undefined = undefined
   tracking: Boolean = false
+  dirty: Boolean = false
   constructor(public fn: Function) {}
   run() {
     if (this.tracking) return
     this.tracking = true
     const prevActiveSub = activeSub
     try {
-      this.depsTail = undefined
+      this.depsTail = undefined //重新收集依赖的标志
       // activeSub = this
       setActiveSub(this)
       return this.fn() //return effect的return
     } finally {
-      // activeSub = prevActiveSub
-      setActiveSub(prevActiveSub)
-      this.tracking = false
-      // console.count('依赖收集次数')
-
       //清理dep
-      if (this.depsTail) {
-        endTrack(this)
-      }
-      // console.log('清理deps', this)
+      endTrack(this)
+
+      setActiveSub(prevActiveSub)
     }
   }
   scheduler() {
@@ -55,6 +50,8 @@ export const endTrack = sub => {
     sub.depsTail.nextDep = undefined
     clearDep(link)
   }
+  sub.tracking = false
+  sub.dirty = false
 }
 const clearDep = link => {
   //临时变量 保存当前节点属性的指向

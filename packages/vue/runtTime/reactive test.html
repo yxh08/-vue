@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>reactive - test</title>
+  </head>
+  <body>
+    <script type="module">
+      import {
+        createApp,
+        h,
+        reactive,
+        effect,
+        getCurrentInstance,
+        ref,
+        onMounted,
+        onUnmounted,
+        KeepAlive,
+      } from '../dist/vue.esm.js'
+
+      const obj = reactive({ a: { b: { c: 1 } } })
+
+      const e = effect(() => {
+        console.log(obj.a.b.c)
+      })
+
+      setTimeout(() => {
+        obj.a.b.c = 2
+      })
+    </script>
+  </body>
+</html>

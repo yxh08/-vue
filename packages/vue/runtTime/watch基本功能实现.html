@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>watch基本功能实现</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      // import {
+      //   h,
+      //   ref,
+      //   render,
+      //   createApp,
+      //   reactive,
+      //   watch,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import { ref, watch, reactive } from '../dist/vue.esm.js'
+
+      const state = ref({ a: { b: 1 } })
+      // const state = ref({ a: { b: { c: { d: 1 } } } })
+      state.value.a.b = state.value
+      watch(
+        state,
+        (newValue, oldValue) => {
+          console.log('newValue, oldValue ===>', newValue, oldValue)
+        },
+        { deep: true },
+      )
+
+      setTimeout(() => {
+        state.value.a.b = { d: 2 }
+        console.dir(state)
+      })
+    </script>
+  </body>
+</html>

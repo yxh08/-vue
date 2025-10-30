@@ -29,18 +29,14 @@
           h('div', { key: 'e', style: { color: 'red' } }, 'e'),
         ],
       )
-      const node2 = h(
-        'div',
-
-        [
-          h('div', { key: 'a', style: { color: 'blue' } }, 'a'),
-          h('div', { key: 'c', style: { color: 'blue' } }, 'c'),
-          h('div', { key: 'd', style: { color: 'green' } }, 'd'),
-          h('div', { key: 'g', style: { color: 'red' } }, 'g'),
-          h('div', { key: 'b', style: { color: 'blue' } }, 'b'),
-          h('div', { key: 'e', style: { color: 'blue' } }, 'e'),
-        ],
-      )
+      const node2 = h('div', [
+        h('div', { key: 'a', style: { color: 'blue' } }, 'a'),
+        h('div', { key: 'b', style: { color: 'blue' } }, 'b'),
+        h('div', { key: 'c', style: { color: 'blue' } }, 'c'),
+        h('div', { key: 'd', style: { color: 'green' } }, 'd'),
+        h('div', { key: 'g', style: { color: 'red' } }, 'g'),
+        h('div', { key: 'e', style: { color: 'blue' } }, 'e'),
+      ])
       render(node1, document.body)
 
       setTimeout(() => {

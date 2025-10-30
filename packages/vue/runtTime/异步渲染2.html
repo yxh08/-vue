@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>异步渲染</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      // import {
+      //   createRenderer,
+      //   ref,
+      //   h,
+      //   createApp,
+      //   reactive,
+      //   effect,
+      //   watch,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import {
+        renderOptions,
+        createRenderer,
+        render,
+        h,
+        ref,
+        reactive,
+        createApp,
+        nextTick,
+      } from '../dist/vue.esm.js'
+
+      const Comp = {
+        props: {
+          test: Number,
+        },
+        setup(props, { attrs }) {
+          const count = ref(1)
+          setTimeout(() => {
+            count.value++
+            count.value++
+            count.value++
+          })
+          return function () {
+            console.log('this ===>', this)
+            const container = document.querySelector('#app')
+            this.$nextTick(() => {
+              console.log(container.textContent)
+            })
+            return h('div', { style: { color: 'red' } }, count.value)
+          }
+        },
+      }
+
+      const app = createApp(Comp, {
+        test: 1,
+        style: { border: '1px solid green' },
+      })
+      app.mount('#app')
+    </script>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>KeppAlive</title>
+  </head>
+  <style>
+    .test-enter-from,
+    .test-leave-to {
+      transform: translateX(30px);
+    }
+
+    .test-enter-active,
+    .test-leave-active {
+      transition: all ease 0.5s;
+    }
+  </style>
+  <body>
+    <button id="btn">切换</button>
+    <div id="app"></div>
+    <script type="module">
+      // import {
+      //   h,
+      //   ref,
+      //   render,
+      //   createApp,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import {
+        createApp,
+        h,
+        getCurrentInstance,
+        ref,
+        onMounted,
+        onUnmounted,
+        Transition,
+      } from '../dist/vue.esm.js'
+
+      const App = {
+        setup() {
+          const show = ref(true)
+          btn.addEventListener('click', () => {
+            show.value = !show.value
+          })
+          return () => {
+            return h(
+              Transition,
+              {
+                name: 'test',
+                onBeforeEnter(el) {
+                  console.log('onBeforeEnter')
+                },
+                onEnter() {
+                  console.log('onEnter')
+                },
+                onBeforeLeave(el) {
+                  console.log('onBeforeLeave')
+                },
+                onLeave(el) {
+                  console.log('onBeforeLeave')
+                },
+              },
+              () => (show.value ? h('div', '我是子组件') : null),
+            )
+          }
+        },
+      }
+
+      const app = createApp(App)
+      app.mount('#app')
+    </script>
+  </body>
+</html>

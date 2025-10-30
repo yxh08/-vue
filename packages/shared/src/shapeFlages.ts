@@ -12,7 +12,7 @@ export enum ShapeFlags {
   //表示该节点的子节点是通过插槽(slots)传入的
   SLOTS_CHILDREN = 1 << 5, //100000
   //表示teleport 组件,用于将子节点传送到其他位置
-  TELEPORT_CHILDREN = 1 << 6, // 1000000
+  TELEPORT = 1 << 6, // 1000000
   //表示Suspense组件 ,用于处理异步加载组件时显示备用内容
   SUSPENSE_CHILDREN = 1 << 7, //10000000
   //表示该组件应当被 keep-alive 组件缓存,

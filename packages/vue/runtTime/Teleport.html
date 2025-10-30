@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Teleport</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      // import {
+      //   h,
+      //   ref,
+      //   render,
+      //   createApp,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import {
+        createApp,
+        renderOptions,
+        createRenderer,
+        render,
+        h,
+        getCurrentInstance,
+        ref,
+        Text,
+        onBeforeMount,
+        onMounted,
+        onBeforeUpdate,
+        onUpdated,
+        onBeforeUnmount,
+        onUnmounted,
+        Teleport,
+      } from '../dist/vue.esm.js'
+
+      const comp = {
+        setup() {
+          const flag = ref(true)
+          onUnmounted(() => {
+            console.log('onUnmounted')
+          })
+          return () =>
+            h(
+              'div',
+              {
+                onClick: () => {
+                  console.log(12)
+                  flag.value = !flag.value
+                },
+                style: {
+                  width: '100px',
+                  height: '100px',
+                  border: '1px solid red',
+                },
+              },
+              h(Teleport, { to: 'body', disabled: flag.value }, [
+                h('div', `子组件1${flag.value}`),
+                h('div', `子组件2${flag.value}`),
+                h('div', `子组件3${flag.value}`),
+              ]),
+            )
+        },
+      }
+
+      const app = createApp(comp)
+      app.mount('#app')
+
+      setTimeout(() => {
+        app.unmount()
+      }, 2000)
+    </script>
+  </body>
+</html>

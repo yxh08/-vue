@@ -60,10 +60,10 @@ export const collect = (dep, sub) => {
     sub.deps = newLink
     sub.depsTail = newLink
   } else {
+    //  bug
     sub.depsTail.nextDep = newLink
     sub.depsTail = newLink
   }
-
   if (!dep.subs) {
     dep.subs = newLink
     dep.subsTail = newLink
@@ -95,15 +95,18 @@ export const trigger = (dep: any) => {
     let curSub: Link | undefined = dep.subs
     let queue: ReactivityEffect[] = []
     while (curSub?.sub) {
-      if ('update' in curSub.sub) {
-        curSub.sub.dirty = true
-        processComputedUpdate(curSub.sub)
-      } else {
-        queue.push(curSub.sub as ReactivityEffect)
+      if (!curSub.sub.dirty && !curSub.sub.tracking) {
+        //当数据是不脏的 并且 sub 不在收集依赖
+        curSub.sub.dirty = true // 触发更新前将数据置为脏数据,更新完成后 会在finally里面执行endtrack 将数据再置为不脏
+        if ('update' in curSub.sub) {
+          processComputedUpdate(curSub.sub)
+        } else {
+          queue.push(curSub.sub as ReactivityEffect)
+        }
       }
+
       curSub = curSub.nextSub
     }
-    console.log('待执行队列', queue)
     for (let i = 0; i <= queue.length - 1; i++) {
       queue[i].notify()
     }

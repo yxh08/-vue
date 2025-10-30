@@ -13,13 +13,14 @@
       //   computed,
       // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
 
-      import { effect, ref, toRef } from '..'
+      import { effect, ref, toRef } from '../dist/vue.esm.js'
 
       const obj = ref({
         name: 'yxh',
       })
 
       let name = toRef(obj.value, 'name')
+
       console.log(name)
 
       effect(() => {

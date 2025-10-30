@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>生命周期</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      // import {
+      //   h,
+      //   ref,
+      //   render,
+      //   createApp,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import {
+        createApp,
+        renderOptions,
+        createRenderer,
+        render,
+        h,
+        getCurrentInstance,
+        ref,
+        Text,
+        onBeforeMount,
+        onMounted,
+        onBeforeUpdate,
+        onUpdated,
+        onBeforeUnmount,
+        onUnmounted,
+      } from '../dist/vue.esm.js'
+
+      const Child = {
+        setup(props, { slots }) {
+          const vm = getCurrentInstance()
+          console.log('vm ===>', vm)
+          return function () {
+            console.log('slots', slots)
+            return h('div', { style: { color: 'red' } }, [
+              h('div', '我是子组件'),
+              slots.header(),
+            ])
+          }
+        },
+      }
+
+      const comp = {
+        setup() {
+          const flag = ref(true)
+
+          setTimeout(() => {
+            flag.value = !flag.value
+          }, 1000)
+          onBeforeMount(() => {
+            console.log('onBeforeMount')
+          })
+
+          onMounted(() => {
+            console.log('onMounted ====>')
+          })
+          onBeforeUpdate(() => {
+            console.log('onBeforeUpdate ===>')
+          })
+          onUpdated(() => {
+            console.log('onUpdated ===>')
+          })
+          onBeforeUnmount(() => {
+            console.log('onBeforeUnmount ===>')
+          })
+          onUnmounted(() => {
+            console.log('onUnmounted ===>')
+          })
+          return () =>
+            h(
+              'div',
+              {
+                onClick: () => {
+                  flag.value = !flag.value
+                  console.log(flag)
+                },
+              },
+              h(Child, null, {
+                header: flag.value
+                  ? () => h('h', { key: 1 }, `插槽1${flag.value}`)
+                  : () => h('span', { key: 2 }, `插槽2${flag.value}`),
+              }),
+            )
+        },
+      }
+
+      const app = createApp(comp)
+      app.mount('#app')
+
+      setTimeout(() => {
+        app.unmount()
+      }, 2000)
+    </script>
+  </body>
+</html>

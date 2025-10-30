@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>父子关系</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      // import {
+      //   h,
+      //   ref,
+      //   render,
+      //   createApp,
+      //   onMounted,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import {
+        createApp,
+        renderOptions,
+        createRenderer,
+        render,
+        h,
+        getCurrentInstance,
+        ref,
+        Text,
+        onBeforeMount,
+        onMounted,
+        onBeforeUpdate,
+        onUpdated,
+        onBeforeUnmount,
+        onUnmounted,
+        useTemplateRef,
+        provide,
+        inject,
+      } from '../dist/vue.esm.js'
+
+      const Child2 = {
+        name: 'Child2',
+        setup() {
+          const count = inject('count')
+          return () => {
+            return h(
+              'div',
+              { style: { color: 'green' } },
+              `child2 :${count.value}`,
+            )
+          }
+        },
+      }
+      const Child1 = {
+        name: 'Child1',
+        setup() {
+          return () => {
+            return h('div', { style: { color: 'red' } }, ['Child1', h(Child2)])
+          }
+        },
+      }
+
+      const App = {
+        name: 'App',
+        setup() {
+          const flag = ref(true)
+          const count = ref(0)
+          provide('count', count)
+          return () =>
+            h(
+              'div',
+              {
+                onClick: () => {
+                  count.value++
+                },
+              },
+              [
+                h('App组件'),
+                flag.value ? h(Child1, { ref: 'ChildRef1' }) : '未渲染组件',
+              ],
+            )
+        },
+      }
+
+      const app = createApp(App)
+      app.mount('#app')
+    </script>
+  </body>
+</html>

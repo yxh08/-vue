@@ -25,19 +25,11 @@ importers:
         specifier: ^5.7.3
         version: 5.8.3
 
-  packages/Reactivity:
+  packages/reactivity:
     dependencies:
       '@vue/shared':
         specifier: workspace:^
         version: link:../shared
-
-  packages/Shared: {}
-
-  packages/Vue:
-    dependencies:
-      '@vue/runtime-dom':
-        specifier: workspace:^
-        version: link:../runtime-dom
 
   packages/runtime-core:
     dependencies:
@@ -56,6 +48,14 @@ importers:
       '@vue/shared':
         specifier: workspace:^
         version: link:../shared
+
+  packages/shared: {}
+
+  packages/vue:
+    dependencies:
+      '@vue/runtime-dom':
+        specifier: workspace:^
+        version: link:../runtime-dom
 
 packages:
 

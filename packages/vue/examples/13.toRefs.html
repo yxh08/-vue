@@ -2,31 +2,31 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>11.computed基础</title>
+    <title>toRefs</title>
   </head>
   <body>
     <div id="msg"></div>
     <script type="module">
-      // import {
-      //   ref,
-      //   effect,
-      //   computed,
-      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import {
+        ref,
+        effect,
+        computed,
+        toRefs,
+      } from '../../../node_modules/vue/dist/vue.esm-browser.js'
 
-      import { effect, ref, toRefs } from '..'
+      // import { effect, ref, reactive, toRefs } from '../dist/vue.esm.js'
 
       const obj = ref({
         name: 'yxh',
+        age: 14,
+        address: 'hz',
       })
 
-      let obj_ = toRefs(obj)
-      console.log(obj_)
-
-      // effect(() => {
-      //   console.log(obj_.value)
-      // })
-
-      // setTimeout(() => (name.value = 'yxh2'))
+      let newObj = toRefs(obj.value)
+      effect(() => {
+        console.log(newObj.name.value)
+      })
+      setTimeout(() => (obj.value.name = 'yxh2'))
     </script>
   </body>
 </html>

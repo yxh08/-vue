@@ -9,16 +9,14 @@ const createInvoker = nextValue => {
 const vei = 'vei'
 
 export function patchEvent(el, eventName, prevValue, nextValue) {
-  console.log('patchAttr', el, eventName, prevValue, nextValue)
   const rawName = eventName.slice(2).toLowerCase()
 
-  console.log('nextValue', nextValue)
   el[vei] ??= {}
 
   let Invoker = el[vei][rawName]
 
-  if (Invoker && nextValue) {
-    Invoker.value = nextValue
+  if (Invoker) {
+    if (nextValue) Invoker.value = nextValue
   } else {
     if (nextValue) {
       Invoker = createInvoker(nextValue)

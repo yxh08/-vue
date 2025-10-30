@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>生命周期</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      // import {
+      //   h,
+      //   ref,
+      //   render,
+      //   createApp,
+      //   reactive,
+      //   watch,
+      // } from '../../../node_modules/vue/dist/vue.esm-browser.js'
+      import { ref, watch, reactive } from '../dist/vue.esm.js'
+
+      //问题一：
+      // let state1 = reactive({ a: 0 })
+      // watch(state1, newValue => {
+      //   console.log(newValue.a)
+      // })
+      // setTimeout(() => {
+      //   state1.a++
+      //   state1 = reactive({ a: 2 })
+      // })
+
+      //问题一：
+      let state2 = reactive({ a: 0 })
+      watch(
+        () => state2,
+        newValue => {
+          console.log(newValue.a)
+        },
+        { deep: true },
+      )
+      setTimeout(() => {
+        state2.a++
+        state2 = reactive({ a: 2 })
+      })
+    </script>
+  </body>
+</html>

@@ -24,7 +24,16 @@
           style: { color: 'red' },
         },
         [
-          h('div', { key: 'a' }, 'a'),
+          h(
+            'div',
+            {
+              key: 'a',
+              onClick: () => {
+                console.log(1)
+              },
+            },
+            'a',
+          ),
           h('div', { key: 'b' }, 'b'),
           h('div', { key: 'c' }, 'c'),
           h('div', { key: 'd' }, 'd'),
@@ -37,7 +46,16 @@
           style: { color: 'blue' },
         },
         [
-          h('div', { key: 'a' }, 'a'),
+          h(
+            'div',
+            {
+              key: 'a',
+              onClick: () => {
+                console.log(2)
+              },
+            },
+            'a',
+          ),
           h('div', { key: 'b' }, 'b'),
           h('div', { key: 'c' }, 'c'),
         ],

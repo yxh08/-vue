@@ -10,10 +10,14 @@ export interface Dep {
 export class Dep {
   subs: Link | undefined
   subsTail: Link | undefined
+  target: any
+  key: string
 
-  constructor() {
+  constructor(target, key) {
     this.subs = undefined
     this.subsTail = undefined
+    this.target = target
+    this.key = key
   }
 }
 
@@ -25,9 +29,10 @@ export function goCollect(target, key) {
   let dep = keyMap.get(key)
 
   if (!dep) {
-    keyMap.set(key, (dep = new Dep()))
+    keyMap.set(key, (dep = new Dep(target, key)))
   }
   if (activeSub) {
+    console.log('dep', dep, activeSub)
     collect(dep, activeSub)
   }
 }

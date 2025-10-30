@@ -1,5 +1,5 @@
 import { collect, Dependcy, Link, Sub, trigger } from './system'
-import { hasChanged, isFunction } from '@vue/shared/src/utils'
+import { hasChanged, isFunction } from '@vue/shared/src/index'
 import { activeSub, endTrack, setActiveSub } from './effect'
 
 export function computed(getterOrOptions) {

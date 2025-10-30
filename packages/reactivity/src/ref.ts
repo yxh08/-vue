@@ -2,7 +2,7 @@ import { activeSub } from './effect'
 import { collect, Link, trigger } from './system'
 import { ReactiveFlags } from './constance'
 import { reactive } from './reactive'
-import { hasChanged, isObject } from '@vue/shared/src/utils'
+import { hasChanged, isObject } from '@vue/shared/src/index'
 
 export const ref = (value: any) => {
   return new RefImpl(value)
@@ -43,16 +43,38 @@ export function toRef(object, key) {
   return new ObjectRefImpl(object, key)
 }
 
-export function toRefs(object) {
-  const keys = Object.keys(object)
-  console.log(keys)
-  // return new ObjectRefImpl(object)
+export function toRefs(target) {
+  const obj = {}
+  if (!isObject(target)) return target
+  for (let key in target) {
+    obj[key] = new ObjectRefImpl(target, key)
+  }
+  return obj
 }
 
+export function unRef(value) {
+  if (isRef(value)) {
+    return value.value
+  } else {
+    return value
+  }
+}
 export function proxyRefs(target) {
   return new Proxy(target, {
-    get(target, key, receiver) {},
-    set(target, key, newValue, receiver) {},
+    get(...args) {
+      const res = Reflect.get(...args)
+      return unRef(res)
+    },
+    set(target, key, newValue, receiver) {
+      const oldValue = target[key]
+
+      if (isRef(oldValue) && !isRef(newValue)) {
+        oldValue.value = newValue
+        return true
+      }
+
+      return Reflect.set(target, key, newValue, receiver)
+    },
   })
 }
 

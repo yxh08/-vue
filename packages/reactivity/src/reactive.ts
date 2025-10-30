@@ -1,10 +1,12 @@
-import { isObject } from '@vue/shared/src/utils'
+import { isObject } from '@vue/shared/src/index'
 import { mutableHandlers } from './baseHandlers'
 
 export function reactive(target: any) {
   return createReactiveObject(target)
 }
-
+export function isReactive(obj) {
+  return !!proxyMap.get(obj)
+}
 const proxyMap = new WeakMap() //存放响应式对象的proxy
 const proxySet = new WeakSet() //已经通过代理得到proxy 而再次代理,通过weakSet检查是target是否是是一个proxy.
 function createReactiveObject(target) {
